@@ -1,7 +1,8 @@
 import RPi.GPIO as GPIO
 import time
 import threading
-
+# add debug variable to turn on and OFF the debug prints that shouldnt be
+#there under normal operation
 def digitalRead(pin,mode=GPIO.BOARD):
 	if(pin==None):
 		print("Please specify the pin no.")
@@ -54,7 +55,7 @@ def digitalReadChange(pin,callback,freq=1,mode=GPIO.BOARD):
 	
 class digitalReadWithInterrupt(threading.Thread):
 	def __init__(self,pin,filename="log.txt",freq=1,mode=GPIO.BOARD):
-		self.pin=pin
+                self.pin=pin
 		self.control=1
 		self.filename=filename
 		self.freq=freq
@@ -75,14 +76,19 @@ class digitalReadWithInterrupt(threading.Thread):
 				print(log)
 				file.write(log)
 				time.sleep(self.freq)
+			print("Logger Thread Terminated on pin " + str(self.pin));
 	
 	def start(self):
+                #add error codes of multiple calls to start
+                #if slready a thread is running then dont start another thread 
+                print("Logger Thread started on pin " + str(self.pin));
 		thread=threading.Thread(target=self.file_log,args=())
 		thread.daemon=True
 		thread.start()
 				
 	def stop(self):
+                #if already a thread is stopped send back an error
+                #that no thread is running by return values
 		self.control=0
-		print("Logger Thread Terminated")
 		
 		

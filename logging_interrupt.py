@@ -1,10 +1,14 @@
 from gpio_module import digitalReadWithInterrupt
 import time
 
-t = digitalReadWithInterrupt(10)
+monitorThread8 = digitalReadWithInterrupt(8)
+monitorThread10 = digitalReadWithInterrupt(10)
 
-t.start()
+monitorThread8.start()
+monitorThread10.start()
 while 1:
-	time.sleep(4)
+	time.sleep(5)
 	print("Main thread Running")
-	t.stop()
+	monitorThread10.stop()
+	time.sleep(5)
+	monitorThread8.stop()
